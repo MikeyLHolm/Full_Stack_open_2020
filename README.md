@@ -11,24 +11,24 @@ My submissions for [Full Stack open 2020](https://fullstackopen.com/ "Full Stack
 
 ## Progress
 
-**Part0 (Fundamentals of Web apps):** 
+**Part0** (_Fundamentals of Web apps_)**:**
   * Completed (15.4.2020)
 
-**Part1 (Introduction to React):**
+**Part1** (_Introduction to React_)**:**
   * Under Construction (15.4.2020->)
 
-**Part2 (Communicating with server):**
+**Part2** (_Communicating with server_)**:**
 
-**Part3 (Programming a server with NodeJS and Express):**
+**Part3** (_Programming a server with NodeJS and Express_)**:**
 
-**Part4 (Testing Express servers, user administration):**
+**Part4** (_Testing Express servers, user administration_)**:**
 
-**Part5 (Testing React apps):**
+**Part5** (_Testing React apps_)**:**
 
-**Part6 (State management with Redux):**
+**Part6** (_State management with Redux_)**:**
 
-**Part7 (React router, custom hooks, styling app with CSS and webpack):**
+**Part7** (_React router, custom hooks, styling app with CSS and webpack_)**:**
 
-**Part8 (GraphQL):**
+**Part8** (_GraphQL_)**:**
 
-**Part9 (Typescript):**
+**Part9** (_Typescript_)**:**
