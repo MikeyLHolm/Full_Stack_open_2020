@@ -11,24 +11,24 @@ My submissions for [Full Stack open 2020](https://fullstackopen.com/ "Full Stack
 
 ## Progress
 
-**Part0** (_Fundamentals of Web apps_)**:**
+**[Part0](https://fullstackopen.com/en/part0)** (_Fundamentals of Web apps_)**:**
   * Completed (15.4.2020)
 
-**Part1** (_Introduction to React_)**:**
+**[Part1](https://fullstackopen.com/en/part1)** (_Introduction to React_)**:**
   * Under Construction (15.4.2020->)
 
-**Part2** (_Communicating with server_)**:**
+**[Part2](https://fullstackopen.com/en/part2)** (_Communicating with server_)**:**
 
-**Part3** (_Programming a server with NodeJS and Express_)**:**
+**[Part3](https://fullstackopen.com/en/part3)** (_Programming a server with NodeJS and Express_)**:**
 
-**Part4** (_Testing Express servers, user administration_)**:**
+**[Part4](https://fullstackopen.com/en/part4)** (_Testing Express servers, user administration_)**:**
 
-**Part5** (_Testing React apps_)**:**
+**[Part5](https://fullstackopen.com/en/part5)** (_Testing React apps_)**:**
 
-**Part6** (_State management with Redux_)**:**
+**[Part6](https://fullstackopen.com/en/part6)** (_State management with Redux_)**:**
 
-**Part7** (_React router, custom hooks, styling app with CSS and webpack_)**:**
+**[Part7](https://fullstackopen.com/en/part7)** (_React router, custom hooks, styling app with CSS and webpack_)**:**
 
-**Part8** (_GraphQL_)**:**
+**[Part8](https://fullstackopen.com/en/part8)** (_GraphQL_)**:**
 
-**Part9** (_Typescript_)**:**
+**[Part9](https://fullstackopen.com/en/part9)** (_Typescript_)**:**
