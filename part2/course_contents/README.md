@@ -1,68 +1,158 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 2.1: course contents step6
+Let's finish the code for rendering course contents from exercises 1.1 - 1.5. You can start with the code from the model answers. The model answers for part 1 can be found by going to the submission system, click on my submissions at the top, and in the row corresponding to part 1 under the solutions column click on show. To see the solution to the course info exercise, click on index.js under kurssitiedot ("kurssitiedot" means "course info").
 
-## Available Scripts
+Note that if you copy a project from one place to another, you might have to destroy the node_modules directory and install the dependencies again with the command npm install before you can start the application. It might not be good to copy a project or to put the node_modules directory into the version control per se.
 
-In the project directory, you can run:
+Let's change the App component like so:
 
-### `npm start`
+```
+const App = () => {
+  const course = {
+    id: 1,
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10,
+        id: 1
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7,
+        id: 2
+      },
+      {
+        name: 'State of a component',
+        exercises: 14,
+        id: 3
+      }
+    ]
+  }
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  return (
+    <div>
+      <Course course={course} />
+    </div>
+  )
+}
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Define a component responsible for formatting a single course called Course.
 
-### `npm test`
+The component structure of the application can be, for example, the following:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+App
+  Course
+    Header
+    Content
+      Part
+      Part
+      ...
+```
+      
+Hence, the Course component contains the components defined in the previous part, which are responsible for rendering the course name and its parts.
 
-### `npm run build`
+The rendered page can, for example, look as follows:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![alt text](https://github.com/MikeyLHolm/Full_Stack_open_2020/blob/master/part2/course_contents/img/8e.png "fullstack content")
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+You don't need the sum of the exercises yet.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The application must work regardless of the number of parts a course has, so make sure the application works if you add or remove parts of a course.
 
-### `npm run eject`
+Ensure that the console shows no errors!
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 2.2: Course contents step7
+Show also the sum of the exercises of the course.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![alt text](https://github.com/MikeyLHolm/Full_Stack_open_2020/blob/master/part2/course_contents/img/9e.png "fullstack content")
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 2.3*: Course contents step8
+If you haven't done so already, calculate the sum of exercises with the array method reduce.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Pro tip: when your code looks as follows:
 
-## Learn More
+```
+const total = 
+  parts.reduce( (s, p) => someMagicHere )
+```
+  
+and does not work, it's worth to use console.log, which requires the arrow function to be written in its longer form:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+const total = parts.reduce( (s, p) => {
+  console.log('what is happening', s, p)
+  return someMagicHere 
+})
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Pro tip2: There is a plugin for VS code that automatically changes short form arrow functions into their longer form, and vice versa.
 
-### Code Splitting
+![alt text](https://github.com/MikeyLHolm/Full_Stack_open_2020/blob/master/part2/course_contents/img/5b.png "fullstack content")
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## 2.4: Course contents step9
+Let's extend our application to allow for an arbitrary number of courses:
 
-### Analyzing the Bundle Size
+```
+const App = () => {
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    }, 
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+  return (
+    <div>
+      // ...
+    </div>
+  )
+}
+```
 
-### Making a Progressive Web App
+The application can, for example, look like this:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+![alt text](https://github.com/MikeyLHolm/Full_Stack_open_2020/blob/master/part2/course_contents/img/10e.png "fullstack content")
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## 2.5: separate module
+Declare the Course component as a separate module, which is imported by the App component. You can include all subcomponents of the course into the same module.
