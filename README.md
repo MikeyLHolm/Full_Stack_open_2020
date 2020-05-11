@@ -15,9 +15,10 @@ My submissions for [Full Stack open 2020](https://fullstackopen.com/ "Full Stack
   * Completed (15.4.2020)
 
 **[Part1](https://fullstackopen.com/en/part1)** (_Introduction to React_)**:**
-  * Under Construction (15.4.2020->)
+  * Completed (22.4.2020)
 
 **[Part2](https://fullstackopen.com/en/part2)** (_Communicating with server_)**:**
+  * Under Construction (4.5.2020->)
 
 **[Part3](https://fullstackopen.com/en/part3)** (_Programming a server with NodeJS and Express_)**:**
 
