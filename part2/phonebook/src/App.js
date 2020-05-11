@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
 
-function App() {
+const App = () => {
+  const [ persons, setPersons ] = useState([])
+  const [ newName, setNewName ] = useState('')
+
+  const addPerson = (event) => {
+  	event.preventDefault()
+    if (persons.map(person => person.name).includes(newName)) {
+      window.alert(newName + ' is already added to phonebook')
+    } else {
+      const personObject = { name: newName, id: newName}
+
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
+
+
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={addPerson}>
+        <div>
+          name:
+          <input
+            value={newName}
+            onChange={handleNameChange}
+          />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      {/*<div>debug: {newName}</div>*/}
+      <h2>Numbers</h2>
+      {/*<div>*/}
+      {/*  {persons.map(person => person.name)}*/}
+      {/*</div>*/}
+      <ul>
+        {persons.map(person => (
+          <li key={person.id}>{person.name}</li>
+        ))}
+      </ul>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
