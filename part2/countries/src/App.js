@@ -6,6 +6,7 @@ import Country from "./components/Country";
 const App = () => {
   const [ newSearch, setNewSearch ] = useState('')
   const [ countries, setCountry] = useState([])
+  const [ weather, setWeather] = useState([])
 
   const hook = () => {
     axios
@@ -18,7 +19,7 @@ const App = () => {
   useEffect(hook, [])
 
   const handleSearchChange = (event) => setNewSearch(event.target.value)
-
+  const handleWeather = weather => setWeather(weather)
   const showCountry = (event) => {
     event.preventDefault()
     setNewSearch(event.target.value)
@@ -33,8 +34,10 @@ const App = () => {
       />
       <Country
         countries={countries}
+        handleWeather={handleWeather()}
         search={newSearch}
         show={showCountry}
+        weather={weather}
       />
     </div>
   )

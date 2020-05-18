@@ -1,27 +1,33 @@
 import React from 'react'
 import FilteredCountry from "./FilteredCountry";
+import ShowCountry from "./ShowCountry";
 
-const Country = ({ countries, search, show }) => {
+const Country = ({ countries, handleWeather,search, show, weather }) => {
 
   const filterCountries = countries.filter(country =>
     country.name.toLowerCase().includes(search.toLowerCase()))
 
-  if (filterCountries.length > 10) {
+  if (filterCountries.length === countries.length) {
+    return (
+      <div/>
+    )
+  } else if (filterCountries.length > 10) {
     return (
       'Too many matches, specify another filter'
     )
-  }
-
-  if (filterCountries.length === 1) {
+  } else if (filterCountries.length === 1) {
     return (
-      <FilteredCountry country={filterCountries[0]} />
+      <FilteredCountry country={filterCountries[0]} weather={weather} handle={handleWeather} />
     )
   }
 
   return (
     filterCountries.map(country =>
       <div key={country.alpha2Code}>
-        <span>{country.name}<br/></span>
+        <span>
+          <ShowCountry country={country} show={show}/>
+          <br/>
+        </span>
       </div>
     )
   )
