@@ -1,7 +1,7 @@
 import React from 'react'
 import Weather from "./Weather";
 
-const FilteredCountry = ({ country, weather, handle }) => {
+const FilteredCountry = ({ country }) => {
   return (
 
     <div>
@@ -18,7 +18,7 @@ const FilteredCountry = ({ country, weather, handle }) => {
       </ul>
       <img src={country.flag} width="10%" alt={`Flag of ${country.name}`} />
       <h3>Weather in {country.capital}</h3>
-      <Weather capital={country.capital} weather={weather} handle={handle} />
+      <Weather capital={country.capital} />
 
     </div>
   )

@@ -2,7 +2,7 @@ import React from 'react'
 import FilteredCountry from "./FilteredCountry";
 import ShowCountry from "./ShowCountry";
 
-const Country = ({ countries, handleWeather,search, show, weather }) => {
+const Country = ({ countries, search, show }) => {
 
   const filterCountries = countries.filter(country =>
     country.name.toLowerCase().includes(search.toLowerCase()))
@@ -17,7 +17,7 @@ const Country = ({ countries, handleWeather,search, show, weather }) => {
     )
   } else if (filterCountries.length === 1) {
     return (
-      <FilteredCountry country={filterCountries[0]} weather={weather} handle={handleWeather} />
+      <FilteredCountry country={filterCountries[0]} />
     )
   }
 
