@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import Persons from "./components/Persons"
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,19 +11,17 @@ const App = () => {
   const [ newFilter, setNewFilter ] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
   console.log('render', persons.length, 'persons')
 
   const addPerson = (event) => {
-  	event.preventDefault()
+    event.preventDefault()
 
     if (persons.map(person => person.name).includes(newName)) {
       window.alert(newName + ' is already added to phonebook')
@@ -35,10 +33,32 @@ const App = () => {
         id: persons.length + 1
       }
 
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
     }
+  }
+
+  const delPerson = id => {
+
+    // const person = persons.find(n => n.id === id).name
+
+    personService
+      .del(id)
+      .then(() => {
+        setPersons(persons.filter(n => n.id !== id))
+      })
+      // .catch(error => {
+      //   alert(
+      //     `the note '${persons.id}' was already deleted from server`
+      //   )
+      //   setPersons(persons.filter(n => n.id !== id))
+      // })
+
   }
 
   const handleNameChange = (event) => setNewName(event.target.value)
@@ -66,6 +86,7 @@ const App = () => {
       <Persons
         filter={newFilter}
         persons={persons}
+        del={delPerson}
       />
 
     </div>
