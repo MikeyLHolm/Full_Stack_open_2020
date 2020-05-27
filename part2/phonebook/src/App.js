@@ -43,15 +43,14 @@ const App = () => {
     }
   }
 
-  const delPerson = id => {
-
-    // const person = persons.find(n => n.id === id).name
-
-    personService
-      .del(id)
-      .then(() => {
-        setPersons(persons.filter(n => n.id !== id))
-      })
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Do you want to delete ${name} from phonebook?`)) {
+      personService
+        .del(id)
+        .then(() => {
+          setPersons(persons.filter(n => n.id !== id))
+        })
+    }
       // .catch(error => {
       //   alert(
       //     `the note '${persons.id}' was already deleted from server`
@@ -84,9 +83,9 @@ const App = () => {
       <h3>Numbers</h3>
 
       <Persons
-        filter={newFilter}
+        filterName={newFilter}
         persons={persons}
-        del={delPerson}
+        deletePerson={deletePerson}
       />
 
     </div>
