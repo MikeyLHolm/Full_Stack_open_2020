@@ -23,15 +23,25 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
+    const personObject = {
+      name: newName,
+      number: newNumber
+    }
+
     if (persons.map(person => person.name).includes(newName)) {
-      window.alert(newName + ' is already added to phonebook')
+
+      if (window.confirm(newName + ' is already added to phonebook, replace the old number with a new one?')) {
+        const idd = persons.find(p => p.name === newName).id
+
+        personService
+          .update(idd, personObject)
+          .then(updatedPerson => {
+              setPersons(persons.map(p => p.id === idd ? updatedPerson : p))
+            }
+          )
+      }
 
     } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1
-      }
 
       personService
         .create(personObject)
@@ -48,16 +58,9 @@ const App = () => {
       personService
         .del(id)
         .then(() => {
-          setPersons(persons.filter(n => n.id !== id))
+          setPersons(persons.filter(p => p.id !== id))
         })
     }
-      // .catch(error => {
-      //   alert(
-      //     `the note '${persons.id}' was already deleted from server`
-      //   )
-      //   setPersons(persons.filter(n => n.id !== id))
-      // })
-
   }
 
   const handleNameChange = (event) => setNewName(event.target.value)
