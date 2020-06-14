@@ -1,7 +1,27 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 app.use(express.json())
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(bodyParser.json())
+morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
+
+app.use(morgan(function (tokens, req, res) {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    tokens.body(req,res)
+  ].join(' ')
+}))
 
 let persons = [
   {
@@ -59,17 +79,8 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-// const generateId = () => {
-//   // const id = Math.random() * 999
-//   const maxId = persons.length > 0
-//     ? Math.max(...persons.map(n => n.id))
-//     : 0
-//   return maxId + 1
-// }
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  console.log(body)
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'name or number missing goddamnit'
@@ -84,15 +95,11 @@ app.post('/api/persons', (request, response) => {
     name: body.name,
     number: body.number,
     date: new Date(),
-    id: Math.floor(Math.random() * Math.floor(9999)),
+    id: Math.floor(Math.random() * 9999),
   }
-
-  console.log(person.id)
   persons = persons.concat(person)
-
   response.json(person)
 })
-
 
 const PORT = 3001
 app.listen(PORT, () => {
