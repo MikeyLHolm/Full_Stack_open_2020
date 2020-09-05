@@ -1,6 +1,6 @@
 {
-  "name": "backend",
-  "version": "0.0.1",
+  "name": "notes-backend",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,8 @@
   "author": "mlindhol",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+	"express": "^4.17.1",
+	"mongoose": "^5.8.9"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
