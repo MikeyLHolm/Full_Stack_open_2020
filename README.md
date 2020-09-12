@@ -22,10 +22,12 @@ My submissions for [Full Stack open 2020](https://fullstackopen.com/ "Full Stack
 
 **[Part3](https://fullstackopen.com/en/part3)** (_Programming a server with NodeJS and Express_)**:**
   * Extra repo for [Part3](https://github.com/MikeyLHolm/Full_Stack_open_2020_part3/blob/master/README.md)
-  * [Direct link to Heroku App](https://mysterious-hamlet-48970.herokuapp.com/)
+  * [Direct link to Heroku App](https://sheltered-everglades-90393.herokuapp.com/)
+  * Completed (10.9.2020)
 
 **[Part4](https://fullstackopen.com/en/part4)** (_Testing Express servers, user administration_)**:**
-
+  * Under construction (xx.xx.2020)
+  
 **[Part5](https://fullstackopen.com/en/part5)** (_Testing React apps_)**:**
 
 **[Part6](https://fullstackopen.com/en/part6)** (_State management with Redux_)**:**
