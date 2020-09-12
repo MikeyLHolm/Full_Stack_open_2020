@@ -1,2 +1,5 @@
 training/
 node_modules/
+requests/
+.DS_Store
+.env
