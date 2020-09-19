@@ -7,11 +7,11 @@ blogsRouter.get('/', (request, response) => {
     .then(blogs => {
       response.json(blogs.map(blog => blog.toJSON()))
     })
-  })
-  
+})
+
 blogsRouter.post('/', (request, response) => {
   const blog = new Blog(request.body)
-  
+
   blog
     .save()
     .then(savedBlog => savedBlog.toJSON())
@@ -21,6 +21,6 @@ blogsRouter.post('/', (request, response) => {
     // .then(result => {
     //   response.status(201).json(result)
     // })
-  })
+})
 
 module.exports = blogsRouter
