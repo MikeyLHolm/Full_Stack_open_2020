@@ -3,18 +3,6 @@ const uniqueValidator = require('mongoose-unique-validator')
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
-const mongoUrl = process.env.MONGODB_URI
-
-console.log('connecting to', mongoUrl)
-
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => {
-    console.log('connected to MongoDB')
-  })
-  .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
-
 const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
