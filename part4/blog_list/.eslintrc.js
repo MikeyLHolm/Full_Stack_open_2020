@@ -19,6 +19,9 @@ module.exports = {
       'error',
       'unix'
     ],
+    'no-unused-vars': [
+      'error',
+      { 'ignoreRestSiblings': true }],
     'quotes': [
       'error',
       'single'

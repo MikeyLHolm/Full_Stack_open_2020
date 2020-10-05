@@ -3,9 +3,9 @@ const dummy = () => {
 }
 
 const favoriteBlog = (blogs) => {
-  const mostLikes = Math.max.apply(Math, blogs.map(function(o) { return o.likes; }))
-  const objectWithMostLikes = blogs.find(function(o){ return o.likes == mostLikes})
-  const {_id, url, __v, ...updatedObject} = objectWithMostLikes
+  const mostLikes = Math.max.apply(Math, blogs.map(function(o) { return o.likes }))
+  const objectWithMostLikes = blogs.find(function(o){ return o.likes === mostLikes})
+  const { _id, url, __v, ...updatedObject } = objectWithMostLikes
   return updatedObject
 }
 
