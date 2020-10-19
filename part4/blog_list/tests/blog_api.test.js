@@ -114,6 +114,21 @@ test('if the likes property is missing from the request, it will default to the 
   expect(theNewBlog.likes).toEqual(0)
 })
 
+test('title and url properties are missing', async () => {
+  const newBlog = {
+    author: 'Edward D. Icky'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
 // test('a specific blog can be viewed', async () => {
 //   const blogsAtStart = await helper.blogsInDb()
 
