@@ -129,6 +129,27 @@ test('title and url properties are missing', async () => {
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
 
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlogs.length - 1
+    )
+
+    const titles = blogsAtEnd.map(r => r.title)
+
+    expect(titles).not.toContain(blogToDelete.title)
+  })
+})
+
 // test('a specific blog can be viewed', async () => {
 //   const blogsAtStart = await helper.blogsInDb()
 
@@ -142,25 +163,6 @@ test('title and url properties are missing', async () => {
 //   const processedblogToView = JSON.parse(JSON.stringify(blogToView))
 
 //   expect(resultblog.body).toEqual(processedblogToView)
-// })
-
-// test('a blog can be deleted', async () => {
-//   const blogsAtStart = await helper.blogsInDb()
-//   const blogToDelete = blogsAtStart[0]
-
-//   await api
-//     .delete(`/api/blogs/${blogToDelete.id}`)
-//     .expect(204)
-
-//   const blogsAtEnd = await helper.blogsInDb()
-
-//   expect(blogsAtEnd).toHaveLength(
-//     helper.initialblogs.length - 1
-//   )
-
-//   const contents = blogsAtEnd.map(r => r.content)
-
-//   expect(contents).not.toContain(blogToDelete.content)
 // })
 
 afterAll(() => {
