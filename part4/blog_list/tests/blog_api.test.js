@@ -164,6 +164,42 @@ describe('addition of a new blog', () => {
   })
 })
 
+describe('updating a blog', () => {
+  test('update likes of a blog post', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0].id
+    const blogUpdate = {
+      // title: 'React patterns',
+      // author: 'Michael Chan',
+      // url: 'https://reactpatterns.com/',
+      likes: 20
+    }
+
+    const updatedBlog = await api
+      .put(`/api/blogs/${blogToUpdate}`)
+      .send(blogUpdate)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(updatedBlog.body.likes).toBe(20)
+    expect(blogsAtEnd[0].likes).toBe(20)
+  })
+
+  test('update with wrong id', async () => {
+    const blogUpdate = {
+      // title: 'React patterns',
+      // author: 'Michael Chan',
+      // url: 'https://reactpatterns.com/',
+      likes: 20
+    }
+
+    await api
+      .put(`/api/blogs/666`)
+      .send(blogUpdate)
+      .expect(400)
+  })
+})
+
 describe('deletion of a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
@@ -184,21 +220,6 @@ describe('deletion of a blog', () => {
     expect(titles).not.toContain(blogToDelete.title)
   })
 })
-
-// test('a specific blog can be viewed', async () => {
-//   const blogsAtStart = await helper.blogsInDb()
-
-//   const blogToView = blogsAtStart[0]
-
-//   const resultblog = await api
-//     .get(`/api/blogs/${blogToView.id}`)
-//     .expect(200)
-//     .expect('Content-Type', /application\/json/)
-
-//   const processedblogToView = JSON.parse(JSON.stringify(blogToView))
-
-//   expect(resultblog.body).toEqual(processedblogToView)
-// })
 
 afterAll(() => {
   mongoose.connection.close()
