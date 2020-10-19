@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
+
 const Blog = require('../models/blog')
 
 beforeEach(async () => {
@@ -91,6 +92,26 @@ test('HTTP POST request to the /api/blogs successfully creates a new blog post',
   expect(titles).toContain(
     'async/await simplifies making async calls'
   )
+})
+
+test('if the likes property is missing from the request, it will default to the value 0', async () => {
+  const newBlog = {
+    title: 'async/await simplifies making async calls',
+    author: 'Edward D. Icky',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const theNewBlog = await blogsAtEnd.find(n => n.author === 'Edward D. Icky')
+  expect(theNewBlog.likes).toEqual(0)
 })
 
 // test('a specific blog can be viewed', async () => {

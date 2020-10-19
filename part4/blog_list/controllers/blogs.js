@@ -3,12 +3,7 @@ const Blog = require('../models/blog')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})
-  response.json(blogs)
-  //   Blog
-//     .find({})
-//     .then(blogs => {
-//       response.json(blogs.map(blog => blog.toJSON()))
-//     })
+  response.json(blogs.map(blog => blog.toJSON()))
 })
 
 blogsRouter.post('/', async (request, response, next) => {
@@ -18,23 +13,15 @@ blogsRouter.post('/', async (request, response, next) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes || 0
   })
-  try {
-    const savedBlog = await blog.save()
-    response.json(savedBlog)
-  } catch(exception) {
-    next(exception)
-  }
-//   blog
-//     .save()
-//     .then(savedBlog => savedBlog.toJSON())
-//     .then(savedAndFormatedBlog => {
-//       response.json(savedAndFormatedBlog)
-//     })
-  // .then(result => {
-  //   response.status(201).json(result)
-  // })
+
+//   try {
+  const savedBlog = await blog.save()
+  response.json(savedBlog.toJSON)
+//   } catch(exception) {
+//     next(exception)
+//   }
 })
 
 module.exports = blogsRouter

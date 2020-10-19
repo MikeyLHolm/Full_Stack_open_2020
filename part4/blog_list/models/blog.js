@@ -10,7 +10,7 @@ const blogSchema = new mongoose.Schema({
   },
   author: String,
   url: String,
-  likes: Number
+  likes: Number,
 })
 
 blogSchema.plugin(uniqueValidator)
