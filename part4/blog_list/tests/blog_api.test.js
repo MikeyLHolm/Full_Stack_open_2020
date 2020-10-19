@@ -84,6 +84,11 @@ test('return the correct amount of blog posts in the JSON format', async () => {
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
 
+test('unique identifier property of the blog posts is named id', async () => {
+  const blogPost = await helper.blogsInDb()
+  expect(blogPost[0].id).toBeDefined()
+})
+
 // test('a specific blog can be viewed', async () => {
 //   const blogsAtStart = await helper.blogsInDb()
 
