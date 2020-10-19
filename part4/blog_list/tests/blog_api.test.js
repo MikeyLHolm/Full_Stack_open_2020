@@ -37,26 +37,7 @@ test('a specific blog is within the returned blogs', async () => {
 })
 
 test('a valid blog can be added', async () => {
-  const newBlog = {
-    title: 'async/await simplifies making async calls',
-    author: 'Edward D. Icky',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 0,
-  }
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-
-  const blogsAtEnd = await helper.blogsInDb()
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-
-  const titles = blogsAtEnd.map(n => n.title)
-  expect(titles).toContain(
-    'async/await simplifies making async calls'
-  )
 })
 
 test('blog without title is not added', async () => {
@@ -85,8 +66,31 @@ test('return the correct amount of blog posts in the JSON format', async () => {
 })
 
 test('unique identifier property of the blog posts is named id', async () => {
-  const blogPost = await helper.blogsInDb()
-  expect(blogPost[0].id).toBeDefined()
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd[0].id).toBeDefined()
+})
+
+test('HTTP POST request to the /api/blogs successfully creates a new blog post', async () => {
+  const newBlog = {
+    title: 'async/await simplifies making async calls',
+    author: 'Edward D. Icky',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes: 0,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const titles = blogsAtEnd.map(n => n.title)
+  expect(titles).toContain(
+    'async/await simplifies making async calls'
+  )
 })
 
 // test('a specific blog can be viewed', async () => {
