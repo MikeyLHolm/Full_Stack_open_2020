@@ -15,7 +15,7 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-describe('when there is initially some notes saved', () => {
+describe('when there is initially some blogs saved', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -51,6 +51,41 @@ describe('when there is initially some notes saved', () => {
   test('unique identifier property of the blog posts is named id', async () => {
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd[0].id).toBeDefined()
+  })
+})
+
+describe('viewing a specific blog', () => {
+  test('succeeds with a valid id', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    const blogToView = blogsAtStart[0]
+
+    const resultBlog = await api
+      .get(`/api/blogs/${blogToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+
+    expect(resultBlog.body).toEqual(processedBlogToView)
+  })
+
+  test('fails with statuscode 404 if blog does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId()
+
+    console.log(validNonexistingId)
+
+    await api
+      .get(`/api/blogs/${validNonexistingId}`)
+      .expect(404)
+  })
+
+  test('fails with statuscode 400 id is invalid', async () => {
+    const invalidId = '5a3d5da59070081a82a3445666'
+
+    await api
+      .get(`/api/blogs/${invalidId}`)
+      .expect(400)
   })
 })
 
