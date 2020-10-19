@@ -15,118 +15,118 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('when there is initially some notes saved', () => {
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('all blogs are returned', async () => {
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('a specific blog is within the returned blogs', async () => {
+    const response = await api.get('/api/blogs')
+
+    const titles = response.body.map(r => r.title)
+    expect(titles).toContain(
+      'Go To Statement Considered Harmful'
+    )
+  })
+
+  test('return the correct amount of blog posts in the JSON format', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('unique identifier property of the blog posts is named id', async () => {
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd[0].id).toBeDefined()
+  })
 })
 
-test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
+describe('addition of a new blog', () => {
+  test('blog without title is not added', async () => {
+    const newBlog = {
+      likes: 0
+    }
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length)
-})
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
 
-test('a specific blog is within the returned blogs', async () => {
-  const response = await api.get('/api/blogs')
+    const blogsAtEnd = await helper.blogsInDb()
 
-  const titles = response.body.map(r => r.title)
-  expect(titles).toContain(
-    'Go To Statement Considered Harmful'
-  )
-})
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
 
-test('a valid blog can be added', async () => {
+  test('HTTP POST request to the /api/blogs successfully creates a new blog post', async () => {
+    const newBlog = {
+      title: 'async/await simplifies making async calls',
+      author: 'Edward D. Icky',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 0,
+    }
 
-})
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
-test('blog without title is not added', async () => {
-  const newBlog = {
-    likes: 0
-  }
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+    const titles = blogsAtEnd.map(n => n.title)
+    expect(titles).toContain(
+      'async/await simplifies making async calls'
+    )
+  })
 
-  const blogsAtEnd = await helper.blogsInDb()
+  test('if the likes property is missing from the request, it will default to the value 0', async () => {
+    const newBlog = {
+      title: 'async/await simplifies making async calls',
+      author: 'Edward D. Icky',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html'
+    }
 
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
-})
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
-test('return the correct amount of blog posts in the JSON format', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-  const blogsAtEnd = await helper.blogsInDb()
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
-})
+    const theNewBlog = await blogsAtEnd.find(n => n.author === 'Edward D. Icky')
+    expect(theNewBlog.likes).toEqual(0)
+  })
 
-test('unique identifier property of the blog posts is named id', async () => {
-  const blogsAtEnd = await helper.blogsInDb()
-  expect(blogsAtEnd[0].id).toBeDefined()
-})
+  test('title and url properties are missing', async () => {
+    const newBlog = {
+      author: 'Edward D. Icky'
+    }
 
-test('HTTP POST request to the /api/blogs successfully creates a new blog post', async () => {
-  const newBlog = {
-    title: 'async/await simplifies making async calls',
-    author: 'Edward D. Icky',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 0,
-  }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+    const blogsAtEnd = await helper.blogsInDb()
 
-  const blogsAtEnd = await helper.blogsInDb()
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-
-  const titles = blogsAtEnd.map(n => n.title)
-  expect(titles).toContain(
-    'async/await simplifies making async calls'
-  )
-})
-
-test('if the likes property is missing from the request, it will default to the value 0', async () => {
-  const newBlog = {
-    title: 'async/await simplifies making async calls',
-    author: 'Edward D. Icky',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html'
-  }
-
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-
-  const blogsAtEnd = await helper.blogsInDb()
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-
-  const theNewBlog = await blogsAtEnd.find(n => n.author === 'Edward D. Icky')
-  expect(theNewBlog.likes).toEqual(0)
-})
-
-test('title and url properties are missing', async () => {
-  const newBlog = {
-    author: 'Edward D. Icky'
-  }
-
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
-
-  const blogsAtEnd = await helper.blogsInDb()
-
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
 })
 
 describe('deletion of a blog', () => {
