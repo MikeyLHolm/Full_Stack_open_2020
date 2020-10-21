@@ -4,20 +4,20 @@ mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
 const blogSchema = new mongoose.Schema({
+  url: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: true
   },
   author: String,
-  url: {
-    type: String,
-    required: true
-  },
-  likes: Number,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }
+  },
+  likes: Number
 })
 
 blogSchema.plugin(uniqueValidator)
