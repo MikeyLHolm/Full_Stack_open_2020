@@ -142,8 +142,9 @@ describe('when there is initially some blogs saved', () => {
 
       const titles = blogsAtEnd.map(n => n.title)
       expect(titles).toContain(
-        'async/await simplifies making async calls'
-      )
+        'async/await simplifies making async calls')
+
+      expect(blogsAtEnd[2].user).toBeDefined()
     })
 
     test('if the likes property is missing from the request, it will default to the value 0', async () => {
