@@ -8,17 +8,16 @@ const bcrypt = require('bcrypt')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
+beforeEach(async () => {
+  await Blog.deleteMany({})
+
+  const blogObjects = helper.initialBlogs
+    .map(blog => new Blog(blog))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
+})
 
 describe('when there is initially some blogs saved', () => {
-  beforeEach(async () => {
-    await Blog.deleteMany({})
-
-    const blogObjects = helper.initialBlogs
-      .map(blog => new Blog(blog))
-    const promiseArray = blogObjects.map(blog => blog.save())
-    await Promise.all(promiseArray)
-  })
-
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -93,7 +92,16 @@ describe('when there is initially some blogs saved', () => {
 
   describe('addition of a new blog', () => {
     test('blog without title is not added', async () => {
+      const passwordHash = await bcrypt.hash('sekret', 10)
+      const newUser = new User({
+        username: 'jortikka',
+        name: 'Hannu Jortikka',
+        passwordHash
+      })
+      await newUser.save()
+
       const newBlog = {
+        user: newUser._id,
         likes: 0
       }
 
@@ -108,11 +116,19 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('HTTP POST request to the /api/blogs successfully creates a new blog post', async () => {
+      const passwordHash = await bcrypt.hash('sekret', 10)
+      const newUser = new User({
+        username: 'jortikka',
+        name: 'Hannu Jortikka',
+        passwordHash
+      })
+      await newUser.save()
+
       const newBlog = {
         title: 'async/await simplifies making async calls',
         author: 'Edward D. Icky',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-        likes: 0,
+        user: newUser._id
       }
 
       await api
@@ -131,10 +147,19 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('if the likes property is missing from the request, it will default to the value 0', async () => {
+      const passwordHash = await bcrypt.hash('sekret', 10)
+      const newUser = new User({
+        username: 'jortikka',
+        name: 'Hannu Jortikka',
+        passwordHash
+      })
+      await newUser.save()
+
       const newBlog = {
         title: 'async/await simplifies making async calls',
         author: 'Edward D. Icky',
-        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html'
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        user: newUser._id
       }
 
       await api
@@ -151,8 +176,17 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('title and url properties are missing', async () => {
+      const passwordHash = await bcrypt.hash('sekret', 10)
+      const newUser = new User({
+        username: 'jortikka',
+        name: 'Hannu Jortikka',
+        passwordHash
+      })
+      await newUser.save()
+
       const newBlog = {
-        author: 'Edward D. Icky'
+        author: 'Edward D. Icky',
+        user: newUser._id
       }
 
       await api
@@ -225,15 +259,15 @@ describe('when there is initially some blogs saved', () => {
     })
   })
 
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save()
+  })
+
   describe('when there is initially one user in db', () => {
-    beforeEach(async () => {
-      await User.deleteMany({})
-
-      const passwordHash = await bcrypt.hash('sekret', 10)
-      const user = new User({ username: 'root', passwordHash })
-      await user.save()
-    })
-
     test('creation succeeds with a fresh username', async () => {
       const usersAtStart = await helper.usersInDb()
 

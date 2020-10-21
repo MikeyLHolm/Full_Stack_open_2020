@@ -13,7 +13,12 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
-  const user = await User.findById(body.userId)
+  if (!(body.title && body.url))
+    return response.status(400).json({
+      error: 'No title and body!'
+    })
+
+  const user = await User.findById(body.user)
 
   const blog = new Blog({
     url: body.url,
@@ -22,9 +27,6 @@ blogsRouter.post('/', async (request, response) => {
     user: user._id,
     likes: body.likes || 0
   })
-
-  if (!(body.title && body.url))
-    response.status(400).end()
 
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
