@@ -7,6 +7,40 @@ const bcrypt = require('bcrypt')
 
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const { initialUsers } = require('./test_helper')
+
+let token
+
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  await api
+    .post('/api/users')
+    .send({
+      username: initialUsers[0].username,
+      name: initialUsers[0].name,
+      password: initialUsers[0].password,
+    })
+
+  const login = await api
+    .post('/api/login')
+    .send({
+      username: initialUsers[0].username,
+      password: initialUsers[0].password,
+    })
+
+  token = login.body.token
+})
+
+// Login user to get token
+
+
+// beforeEach(async () => {
+
+//   const passwordHash = await bcrypt.hash('sekret', 10)
+//   const user = new User({ username: 'root', passwordHash })
+//   await user.save()
+// })
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -116,23 +150,15 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('HTTP POST request to the /api/blogs successfully creates a new blog post', async () => {
-      const passwordHash = await bcrypt.hash('sekret', 10)
-      const newUser = new User({
-        username: 'jortikka',
-        name: 'Hannu Jortikka',
-        passwordHash
-      })
-      await newUser.save()
-
       const newBlog = {
         title: 'async/await simplifies making async calls',
         author: 'Edward D. Icky',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-        user: newUser._id
       }
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `bearer ${token}`)
         .send(newBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
@@ -141,6 +167,7 @@ describe('when there is initially some blogs saved', () => {
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
       const titles = blogsAtEnd.map(n => n.title)
+
       expect(titles).toContain(
         'async/await simplifies making async calls')
 
@@ -148,23 +175,15 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('if the likes property is missing from the request, it will default to the value 0', async () => {
-      const passwordHash = await bcrypt.hash('sekret', 10)
-      const newUser = new User({
-        username: 'jortikka',
-        name: 'Hannu Jortikka',
-        passwordHash
-      })
-      await newUser.save()
-
       const newBlog = {
         title: 'async/await simplifies making async calls',
         author: 'Edward D. Icky',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-        user: newUser._id
       }
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `bearer ${token}`)
         .send(newBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
@@ -177,21 +196,13 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('title and url properties are missing', async () => {
-      const passwordHash = await bcrypt.hash('sekret', 10)
-      const newUser = new User({
-        username: 'jortikka',
-        name: 'Hannu Jortikka',
-        passwordHash
-      })
-      await newUser.save()
-
       const newBlog = {
         author: 'Edward D. Icky',
-        user: newUser._id
       }
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `bearer ${token}`)
         .send(newBlog)
         .expect(400)
 
@@ -205,15 +216,18 @@ describe('when there is initially some blogs saved', () => {
     test('succeeds with status code 204 if id is valid', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
-      console.log(blogsAtStart)
-      console.log(blogToDelete)
-
+      console.log('at start', blogsAtStart)
+      console.log('to delete', blogToDelete)
+      console.log('id', blogToDelete.id)
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `bearer ${token}`)
         .expect(204)
 
-      const blogsAtEnd = await helper.blogsInDb()
-      console.log(blogsAtEnd)
+      console.log('HELLO BABES')
+      const blogsAtEnd = await api.get('/api/blogs')
+      //const blogsAtEnd = await Blog.find({}).populate('user')
+      console.log('at end', blogsAtEnd)
       expect(blogsAtEnd).toHaveLength(
         helper.initialBlogs.length - 1
       )
@@ -222,6 +236,14 @@ describe('when there is initially some blogs saved', () => {
 
       expect(titles).not.toContain(blogToDelete.title)
     })
+
+    test('return 400 if wrong id', async () => {
+      await api
+        .delete('/api/blogs/1')
+        .set('Authorization', `bearer ${token}`)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+    })
   })
 
   describe('updating a blog', () => {
@@ -229,9 +251,6 @@ describe('when there is initially some blogs saved', () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToUpdate = blogsAtStart[0].id
       const blogUpdate = {
-        // title: 'React patterns',
-        // author: 'Michael Chan',
-        // url: 'https://reactpatterns.com/',
         likes: 20
       }
 
@@ -258,14 +277,6 @@ describe('when there is initially some blogs saved', () => {
         .send(blogUpdate)
         .expect(400)
     })
-  })
-
-  beforeEach(async () => {
-    await User.deleteMany({})
-
-    const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })
-    await user.save()
   })
 
   describe('when there is initially one user in db', () => {
