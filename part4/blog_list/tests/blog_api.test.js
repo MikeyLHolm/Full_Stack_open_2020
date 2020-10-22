@@ -214,22 +214,32 @@ describe('when there is initially some blogs saved', () => {
 
   describe('deletion of a blog', () => {
     test('succeeds with status code 204 if id is valid', async () => {
-      const blogsAtStart = await helper.blogsInDb()
-      const blogToDelete = blogsAtStart[0]
-      console.log('at start', blogsAtStart)
-      console.log('to delete', blogToDelete)
-      console.log('id', blogToDelete.id)
+      const newBlog = {
+        title: 'async/await simplifies making async calls',
+        author: 'Edward D. Icky',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      }
+
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `bearer ${token}`)
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAfterPost = await helper.blogsInDb()
+
+      const blogToDelete = blogsAfterPost[2]
+
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
         .set('Authorization', `bearer ${token}`)
         .expect(204)
 
-      console.log('HELLO BABES')
-      const blogsAtEnd = await api.get('/api/blogs')
-      //const blogsAtEnd = await Blog.find({}).populate('user')
-      console.log('at end', blogsAtEnd)
+      const blogsAtEnd = await helper.blogsInDb()
+
       expect(blogsAtEnd).toHaveLength(
-        helper.initialBlogs.length - 1
+        blogsAfterPost.length - 1
       )
 
       const titles = blogsAtEnd.map(r => r.title)
@@ -266,9 +276,6 @@ describe('when there is initially some blogs saved', () => {
 
     test('update with wrong id', async () => {
       const blogUpdate = {
-        // title: 'React patterns',
-        // author: 'Michael Chan',
-        // url: 'https://reactpatterns.com/',
         likes: 20
       }
 

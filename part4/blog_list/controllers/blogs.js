@@ -87,9 +87,6 @@ blogsRouter.delete('/:id', async (request, response) => {
     })
   }
 
-  console.log('SPAM INC')
-  console.log('INE', user.id.toString())
-  console.log('WEIRD', blogToDelete)
   if ( blogToDelete.user.toString() === user.id.toString() ) {
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
