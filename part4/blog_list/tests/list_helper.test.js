@@ -101,3 +101,107 @@ describe('total likes', () => {
     expect(result).toBe(36)
   })
 })
+
+describe('most blogs', () => {
+
+  test('author with most blogs returned', () => {
+    const authorMostBlogs = {
+      author: 'Robert C. Martin',
+      blogs: 3
+    }
+
+    const result = listHelper.mostBlogs(blogs)
+
+    expect(result).toEqual(authorMostBlogs)
+  })
+
+  test('empty blog returns undefined', () => {
+    const emptyBlog = []
+
+    const result = listHelper.mostBlogs(emptyBlog)
+
+    expect(result).toEqual(undefined)
+  })
+
+  test('equal most blogs returns first author', () => {
+    const fewBlogs = [
+      {
+        _id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        likes: 5,
+        __v: 0
+      },
+      {
+        _id: '5a422a851b54a676234d17f7',
+        title: 'React patterns',
+        author: 'Michael Chan',
+        url: 'https://reactpatterns.com/',
+        likes: 7,
+        __v: 0
+      },
+    ]
+
+    const authorMostBlogs = {
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    }
+
+    const result = listHelper.mostBlogs(fewBlogs)
+
+    expect(result).toEqual(authorMostBlogs)
+  })
+})
+
+describe('most likes', () => {
+
+  test('blog with most likes returned', () => {
+    const mostLikes = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    }
+
+    const result = listHelper.mostLikes(blogs)
+
+    expect(result).toEqual(mostLikes)
+  })
+
+  test('empty blog returns undefined', () => {
+    const emptyBlog = []
+
+    const result = listHelper.mostBlogs(emptyBlog)
+
+    expect(result).toEqual(undefined)
+  })
+
+  test('equal most likes returns first author', () => {
+    const fewBlogs = [
+      {
+        _id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+        likes: 5,
+        __v: 0
+      },
+      {
+        _id: '5a422a851b54a676234d17f7',
+        title: 'React patterns',
+        author: 'Michael Chan',
+        url: 'https://reactpatterns.com/',
+        likes: 5,
+        __v: 0
+      },
+    ]
+
+    const mostLikes = {
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    }
+
+    const result = listHelper.mostLikes(fewBlogs)
+
+    expect(result).toEqual(mostLikes)
+  })
+})
