@@ -1,3 +1,4 @@
+.dist/
 training/
 node_modules/
 requests/
