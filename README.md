@@ -26,7 +26,7 @@ My submissions for [Full Stack open 2020](https://fullstackopen.com/ "Full Stack
   * Completed (10.9.2020)
 
 **[Part4](https://fullstackopen.com/en/part4)** (_Testing Express servers, user administration_)**:**
-  * Under construction (xx.xx.2020)
+  * Completed (23.10.2020)
   
 **[Part5](https://fullstackopen.com/en/part5)** (_Testing React apps_)**:**
 
