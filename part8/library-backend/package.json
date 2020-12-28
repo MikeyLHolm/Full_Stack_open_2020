@@ -1,0 +1,11 @@
+{
+  "name": "library-backend",
+  "version": "1.0.0",
+  "description": "Backend of part8 library graphQL",
+  "main": "library-backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mikeylholm",
+  "license": "ISC"
+}
