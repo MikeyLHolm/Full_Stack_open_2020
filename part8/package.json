@@ -4,12 +4,14 @@
   "description": "",
   "main": "library-backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon library-backend.js"
   },
   "author": "mikeylholm",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.19.1",
-    "graphql": "^15.4.0"
+    "graphql": "^15.4.0",
+    "nodemon": "^2.0.7",
+    "uuid": "^3.4.0"
   }
 }
